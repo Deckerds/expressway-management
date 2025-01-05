@@ -91,9 +91,9 @@ const VehicleForm = () => {
         registeredYear: vehicleData.registeredYear,
         registrationNumber: vehicleData.registrationNumber,
       };
-    } catch (error) {
+    } catch (error: any) {
       toaster.create({
-        description: 'Uncaught Error!',
+        description: error?.message || 'Uncaught Error!',
         type: 'error',
       });
     }
@@ -159,9 +159,9 @@ const VehicleForm = () => {
         }
       }
       navigate('/vehicles');
-    } catch (error) {
+    } catch (error: any) {
       toaster.create({
-        description: 'Uncaught Error!',
+        description: error?.message || 'Uncaught Error!',
         type: 'error',
       });
     }

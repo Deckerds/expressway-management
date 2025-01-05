@@ -95,7 +95,7 @@ const AgentManagement = () => {
           />
         </InputGroup>
       </HStack>
-      <Box h="calc(100vh - 250px)" overflow="hidden">
+      <Box h="calc(100vh - 400px)" overflow="hidden">
         <Table.ScrollArea
           borderWidth="1px"
           rounded="md"
@@ -113,7 +113,7 @@ const AgentManagement = () => {
                   Contact Number
                 </Table.ColumnHeader>
                 <Table.ColumnHeader fontWeight="bold">
-                  Access Point Id
+                  Toll Booth
                 </Table.ColumnHeader>
                 <Table.ColumnHeader fontWeight="bold">
                   Status
@@ -131,7 +131,7 @@ const AgentManagement = () => {
                     <Table.Cell>{item.name}</Table.Cell>
                     <Table.Cell>{item.email}</Table.Cell>
                     <Table.Cell>{item.contactNumber}</Table.Cell>
-                    <Table.Cell>{item.accessPointId}</Table.Cell>
+                    <Table.Cell>{item.accessPointName}</Table.Cell>
                     <Table.Cell
                       fontWeight="bold"
                       color={item.status === 'ACTIVE' ? 'green.600' : 'red.600'}

@@ -51,9 +51,9 @@ const ResetPassword: FC<IResetPasswordProps> = ({
             type: 'success',
           });
         }
-      } catch (error) {
+      } catch (error: any) {
         toaster.create({
-          description: 'Uncaught Error!',
+          description: error?.message || 'Uncaught Error!',
           type: 'error',
         });
       } finally {
@@ -73,9 +73,9 @@ const ResetPassword: FC<IResetPasswordProps> = ({
         });
         toggleModal();
       }
-    } catch (error) {
+    } catch (error: any) {
       toaster.create({
-        description: 'Uncaught Error!',
+        description: error?.message || 'Uncaught Error!',
         type: 'error',
       });
     }

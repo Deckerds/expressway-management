@@ -4,10 +4,11 @@ import React, {
   useEffect,
   useRef,
   useState,
-} from "react";
-import { Box, Flex, Input, Text } from "@chakra-ui/react";
-import { FaCaretDown } from "react-icons/fa";
-import { MdOutlineDone } from "react-icons/md";
+} from 'react';
+import { Box, Flex, Input, Text } from '@chakra-ui/react';
+import { FaCaretDown } from 'react-icons/fa';
+import { MdOutlineDone } from 'react-icons/md';
+import { IoMdClose } from 'react-icons/io';
 
 interface ISearchableDropdown {
   options: string[];
@@ -24,8 +25,12 @@ const SearchableDropdown: React.FC<ISearchableDropdown> = ({
 }) => {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [search, setSearch] = useState<string>("");
-  const [filteredOptions, setFilteredOptions] = useState<string[]>(options);
+  const [search, setSearch] = useState<string>('');
+  const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    setFilteredOptions(options);
+  }, [options]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -37,10 +42,10 @@ const SearchableDropdown: React.FC<ISearchableDropdown> = ({
       }
     };
 
-    document.addEventListener("click", handleClickOutside);
+    document.addEventListener('click', handleClickOutside);
 
     return () => {
-      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener('click', handleClickOutside);
     };
   }, [setIsOpen]);
 
@@ -49,8 +54,8 @@ const SearchableDropdown: React.FC<ISearchableDropdown> = ({
     setSearch(value);
     setFilteredOptions(
       options.filter((option) =>
-        option.toLowerCase().includes(value.toLowerCase())
-      )
+        option.toLowerCase().includes(value.toLowerCase()),
+      ),
     );
   };
 
@@ -66,26 +71,36 @@ const SearchableDropdown: React.FC<ISearchableDropdown> = ({
   return (
     <Box w="300px" position="relative">
       {label && (
-        <Text textStyle={"sm"} fontWeight={"bold"}>
+        <Text textStyle={'sm'} fontWeight={'bold'}>
           {label}
         </Text>
       )}
       <Flex
-        justify={"space-between"}
+        justify={'space-between'}
         align="center"
         border="1px solid"
         borderColor="gray.300"
         borderRadius="md"
         cursor="pointer"
         onClick={toggleDropdown}
-        h={12}
+        h={10}
         px={3}
         ref={dropdownRef}
+        bg={'white'}
       >
-        <Text textStyle={"sm"} color={"gray.600"}>
-          {selectedOption || "Select"}
+        <Text textStyle={'sm'} color={'gray.600'}>
+          {selectedOption || 'Select'}
         </Text>
-        <FaCaretDown color="black" />
+        <Flex alignItems={'center'}>
+          {selectedOption && (
+            <IoMdClose
+              onClick={() => setSelectedOption('')}
+              cursor={'pointer'}
+              color="black"
+            />
+          )}
+          <FaCaretDown color="black" />
+        </Flex>
       </Flex>
 
       {isOpen && (
@@ -101,11 +116,15 @@ const SearchableDropdown: React.FC<ISearchableDropdown> = ({
           zIndex="10"
         >
           <Flex flexDir="column">
-            <Box bg={"white"} position="sticky" top={0} zIndex={2} p={2}>
+            <Box bg={'white'} position="sticky" top={0} zIndex={2} p={2}>
               <Input
                 placeholder="Search contacts"
                 value={search}
                 onChange={handleSearchChange}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
               />
             </Box>
             {filteredOptions.map((option) => (
@@ -114,13 +133,13 @@ const SearchableDropdown: React.FC<ISearchableDropdown> = ({
                 py={2}
                 px={4}
                 cursor="pointer"
-                _hover={{ bg: "gray.50" }}
+                _hover={{ bg: 'gray.50' }}
                 onClick={() => handleOptionSelect(option)}
-                justify={"space-between"}
-                alignItems={"center"}
-                borderTop={"1px solid #DCDCDC"}
+                justify={'space-between'}
+                alignItems={'center'}
+                borderTop={'1px solid #DCDCDC'}
                 color="gray.600"
-                fontWeight={"bold"}
+                fontWeight={'bold'}
               >
                 {option}
                 {option === selectedOption && <MdOutlineDone />}

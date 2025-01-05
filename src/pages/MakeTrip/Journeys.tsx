@@ -67,29 +67,37 @@ const Journeys = () => {
 
   const handleScanner = async (result: IDetectedBarcode[]) => {
     if (result.length > 0) {
-      const res = await getTransactionDetails(result[0].rawValue);
-      if (res.statusCode === 200) {
-        const vehicle = res.data.vehicle;
-        const customer = res.data.customer;
-        setHasJourney(res.data.entrance !== null);
-        if (res.data.entrance !== null) {
-          setCurrentJourneyQRData({
-            entranceName: res.data.entrance.name,
-            entranceTime: res.data.transaction.entranceTime,
+      try {
+        const res = await getTransactionDetails(result[0].rawValue);
+        if (res.statusCode === 200) {
+          const vehicle = res.data.vehicle;
+          const customer = res.data.customer;
+          setHasJourney(res.data.entrance !== null);
+          if (res.data.entrance !== null) {
+            setCurrentJourneyQRData({
+              entranceName: res.data.entrance.name,
+              entranceTime: res.data.transaction.entranceTime,
+            });
+          }
+          setQRData({
+            brand: vehicle.brand.name,
+            customerName: customer.name,
+            fuelType: vehicle.fuelType.name,
+            manufacturedYear: vehicle.manufacturedYear,
+            registeredYear: vehicle.registeredYear,
+            vehicleNumber: vehicle.registrationNumber,
+            vehicleType: vehicle.vehicleType.name,
           });
         }
-        setQRData({
-          brand: vehicle.brand.name,
-          customerName: customer.name,
-          fuelType: vehicle.fuelType.name,
-          manufacturedYear: vehicle.manufacturedYear,
-          registeredYear: vehicle.registeredYear,
-          vehicleNumber: vehicle.registrationNumber,
-          vehicleType: vehicle.vehicleType.name,
+        setShowQrReader(false);
+        toggleScannerModal();
+      } catch (error) {
+        toaster.create({
+          description: 'Vehicle not found! Please contact administrator',
+          type: 'error',
         });
+        setShowQrReader(false);
       }
-      setShowQrReader(false);
-      toggleScannerModal();
     }
   };
 
@@ -122,9 +130,9 @@ const Journeys = () => {
         }
         toggleScannerModal();
       }
-    } catch (error) {
+    } catch (error: any) {
       toaster.create({
-        description: 'Uncaught Error!',
+        description: error?.message || 'Uncaught Error!',
         type: 'error',
       });
     }
@@ -145,9 +153,9 @@ const Journeys = () => {
       setTransactionID(null);
       setAmount(null);
     },
-    onError: () => {
+    onError: (error) => {
       toaster.create({
-        description: 'Uncaught Error!',
+        description: error?.message || 'Uncaught Error!',
         type: 'error',
       });
     },

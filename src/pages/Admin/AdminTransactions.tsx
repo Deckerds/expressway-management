@@ -90,13 +90,7 @@ const AdminTransactions = () => {
                 <Table.ColumnHeader fontWeight="bold">ID</Table.ColumnHeader>
                 <Table.ColumnHeader fontWeight="bold">Code</Table.ColumnHeader>
                 <Table.ColumnHeader fontWeight="bold">
-                  Vehicle ID
-                </Table.ColumnHeader>
-                <Table.ColumnHeader fontWeight="bold">
-                  Customer ID
-                </Table.ColumnHeader>
-                <Table.ColumnHeader fontWeight="bold">
-                  Entrance ID
+                  Vehicle
                 </Table.ColumnHeader>
                 <Table.ColumnHeader fontWeight="bold">
                   Entrance Name
@@ -105,16 +99,10 @@ const AdminTransactions = () => {
                   Entrance Time
                 </Table.ColumnHeader>
                 <Table.ColumnHeader fontWeight="bold">
-                  Exit ID
-                </Table.ColumnHeader>
-                <Table.ColumnHeader fontWeight="bold">
                   Exit Name
                 </Table.ColumnHeader>
                 <Table.ColumnHeader fontWeight="bold">
                   Amount
-                </Table.ColumnHeader>
-                <Table.ColumnHeader fontWeight="bold">
-                  Distance
                 </Table.ColumnHeader>
                 <Table.ColumnHeader fontWeight="bold">
                   Status
@@ -127,17 +115,13 @@ const AdminTransactions = () => {
                   <Table.Row key={item.id}>
                     <Table.Cell>{item.id}</Table.Cell>
                     <Table.Cell>{item.code}</Table.Cell>
-                    <Table.Cell>{item.vehicleId}</Table.Cell>
-                    <Table.Cell>{item.customerId}</Table.Cell>
-                    <Table.Cell>{item.entranceId}</Table.Cell>
+                    <Table.Cell>{item.vehicleRegistrationNumber}</Table.Cell>
                     <Table.Cell>{item.entranceName ?? 'N/A'}</Table.Cell>
                     <Table.Cell>
                       {formatDateTime(item.entranceTime) ?? 'N/A'}
                     </Table.Cell>
-                    <Table.Cell>{item.exitId ?? 'N/A'}</Table.Cell>
                     <Table.Cell>{item.exitName ?? 'N/A'}</Table.Cell>
                     <Table.Cell>{item.amount ?? 'N/A'}</Table.Cell>
-                    <Table.Cell>{item.distance ?? 'N/A'}</Table.Cell>
                     <Table.Cell>
                       <Box
                         shadow={'md'}

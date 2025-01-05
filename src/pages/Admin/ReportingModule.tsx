@@ -3,6 +3,7 @@ import { Box, Flex, Grid, Input, Text } from '@chakra-ui/react';
 import { toaster } from '../../components/ui/toaster';
 import { downloadPDF, downloadTransactionPDF } from '../../services/admin';
 import { Button } from '../../components/ui/button';
+import { downloadFile } from '../../common/functions';
 
 const ReportingModule = () => {
   const [startDate, setStartDate] = useState('');
@@ -11,10 +12,17 @@ const ReportingModule = () => {
 
   const downloadAllPdf = async (type: string) => {
     try {
-      await downloadPDF(type);
-    } catch (error) {
+      const res = await downloadPDF(type);
+
+      downloadFile(res, `${type}-report.pdf`);
+
       toaster.create({
-        description: 'Uncaught Error!',
+        description: 'Report downloaded successfully!',
+        type: 'success',
+      });
+    } catch (error: any) {
+      toaster.create({
+        description: error?.message || 'Uncaught Error!',
         type: 'error',
       });
     }
@@ -35,10 +43,17 @@ const ReportingModule = () => {
         });
         return;
       }
-      await downloadTransactionPDF(startDate, endDate, vehiNumber);
-    } catch (error) {
+      const res = await downloadTransactionPDF(startDate, endDate, vehiNumber);
+
+      downloadFile(res, 'transaction-report.pdf');
+
       toaster.create({
-        description: 'Uncaught Error!',
+        description: 'Report downloaded successfully!',
+        type: 'success',
+      });
+    } catch (error: any) {
+      toaster.create({
+        description: error?.message || 'Uncaught Error!',
         type: 'error',
       });
     }

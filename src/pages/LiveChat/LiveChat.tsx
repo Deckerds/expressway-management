@@ -91,7 +91,6 @@ const LiveChat = () => {
               if (!img.style.width || !img.style.height) {
                 img.style.width = '75px';
                 img.style.height = '50px';
-                img.style.objectFit = 'cover';
               }
             });
           }

@@ -1,16 +1,18 @@
-import React, { useState } from "react";
-import { Box, Flex, Text, Input, Group, InputAddon } from "@chakra-ui/react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { Field } from "../../components/ui/field";
-import { PasswordInput } from "../../components/ui/password-input";
-import { Button } from "../../components/ui/button";
-import { useNavigate } from "react-router-dom";
-import { toaster } from "../../components/ui/toaster";
-import { LuUser2 } from "react-icons/lu";
-import { IoKeyOutline } from "react-icons/io5";
-import { login } from "../../services/auth";
-import { ILoggedUser } from "../../common/interfaces";
-import ResetPassword from "./components/ResetPassword";
+import React, { useState } from 'react';
+import { Box, Flex, Text, Input, Group, InputAddon } from '@chakra-ui/react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { Field } from '../../components/ui/field';
+import { PasswordInput } from '../../components/ui/password-input';
+import { Button } from '../../components/ui/button';
+import { useNavigate } from 'react-router-dom';
+import { toaster } from '../../components/ui/toaster';
+import { LuUser2 } from 'react-icons/lu';
+import { IoKeyOutline } from 'react-icons/io5';
+import { login } from '../../services/auth';
+import { ILoggedUser } from '../../common/interfaces';
+import ResetPassword from './components/ResetPassword';
+import { FcHome } from 'react-icons/fc';
+import { Tooltip } from '../../components/ui/tooltip';
 
 interface LoginFormInputs {
   username: string;
@@ -23,7 +25,7 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<LoginFormInputs>({ mode: "onChange" });
+  } = useForm<LoginFormInputs>({ mode: 'onChange' });
 
   const [openResetPassword, setOpenResetPassword] = useState<boolean>(false);
 
@@ -37,41 +39,41 @@ const Login = () => {
 
       if (res.statusCode === 200) {
         const loggedUser: ILoggedUser = res.data;
-        localStorage.setItem("accessToken", loggedUser.accessToken);
-        localStorage.setItem("userRole", loggedUser.userRole);
+        localStorage.setItem('accessToken', loggedUser.accessToken);
+        localStorage.setItem('userRole', loggedUser.userRole);
 
         toaster.create({
-          description: "Login successful!",
-          type: "success",
+          description: 'Login successful!',
+          type: 'success',
         });
 
-        if (loggedUser.userRole === "ADMIN") {
-          navigate("/admin-dashboard");
+        if (loggedUser.userRole === 'ADMIN') {
+          navigate('/admin-dashboard');
           return;
         }
 
         localStorage.setItem(
-          "user",
+          'user',
           JSON.stringify(
-            loggedUser.userRole === "CUSTOMER"
+            loggedUser.userRole === 'CUSTOMER'
               ? loggedUser.customer
-              : loggedUser.agent
-          )
+              : loggedUser.agent,
+          ),
         );
 
-        navigate("/home");
+        navigate('/home');
       }
     } catch (error) {
       toaster.create({
-        description: "Invalid email or password",
-        type: "error",
+        description: 'Invalid email or password',
+        type: 'error',
       });
     }
   };
 
   return (
     <Flex alignItems="center" flexDir="column" w="full" h="full">
-      <Text fontSize="lg" md={{ fontSize: "2xl" }} fontWeight="bold">
+      <Text fontSize="lg" md={{ fontSize: '2xl' }} fontWeight="bold">
         Expressway Management System
       </Text>
       <Box w="full" mt={8} flexGrow={1}>
@@ -86,12 +88,12 @@ const Login = () => {
                   id="email"
                   type="email"
                   placeholder="me@example.com"
-                  {...register("username", {
-                    required: "Email is required",
+                  {...register('username', {
+                    required: 'Email is required',
                     pattern: {
                       value:
                         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                      message: "Invalid email address",
+                      message: 'Invalid email address',
                     },
                   })}
                 />
@@ -109,11 +111,11 @@ const Login = () => {
                   id="password"
                   type="password"
                   placeholder="Enter your password"
-                  {...register("password", {
-                    required: "Password is required",
+                  {...register('password', {
+                    required: 'Password is required',
                     minLength: {
                       value: 8,
-                      message: "Password must be at least 8 characters long",
+                      message: 'Password must be at least 8 characters long',
                     },
                   })}
                 />
@@ -149,7 +151,7 @@ const Login = () => {
                 textDecor="underline"
                 cursor="pointer"
                 fontWeight="bold"
-                onClick={() => navigate("/signup")}
+                onClick={() => navigate('/signup')}
               >
                 Sign up
               </Text>
@@ -157,6 +159,22 @@ const Login = () => {
           </Flex>
         </form>
       </Box>
+      <Tooltip content="Back to home :)">
+        <Flex
+          mt={2}
+          w={10}
+          h={10}
+          borderRadius="50%"
+          shadow={'2px 4px 4px 2px #00000012'}
+          justify={'center'}
+          alignItems={'center'}
+          cursor={'pointer'}
+          _hover={{ bg: 'cyan.50' }}
+          onClick={() => navigate('/')}
+        >
+          <FcHome size={20} />
+        </Flex>
+      </Tooltip>
       <ResetPassword
         open={openResetPassword}
         title="Reset Password"

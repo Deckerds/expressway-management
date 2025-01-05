@@ -1,34 +1,56 @@
-import React from 'react';
 import { Box, Flex, Grid, Input, Text } from '@chakra-ui/react';
+import React, { useEffect } from 'react';
+import { ICustomer, IUpdateProfile } from '../../common/interfaces';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { toaster } from '../../components/ui/toaster';
 import { Field } from '../../components/ui/field';
+import { Switch } from '../../components/ui/switch';
 import { PasswordInput } from '../../components/ui/password-input';
 import { Button } from '../../components/ui/button';
+import { useAuth } from '../../hooks/useAuth';
+import { updateUserProfile } from '../../services/agent';
 import { useNavigate } from 'react-router-dom';
-import { Switch } from '../../components/ui/switch';
-import { SignupFormInputs, SignupFormPayload } from '../../common/interfaces';
-import { toaster } from '../../components/ui/toaster';
-import { signup } from '../../services/auth';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import { PaymentMethod } from '@stripe/stripe-js';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
+import { PaymentMethod } from '@stripe/stripe-js';
 
-const Signup = () => {
-  const navigate = useNavigate();
+const UpdateProfile = () => {
+  const { getUser } = useAuth();
+  const currentUser: ICustomer = getUser();
   const stripe = useStripe();
   const elements = useElements();
 
   const [hasCardDetails, setHasCardDetails] = React.useState<boolean>(false);
 
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors, isSubmitting },
     control,
-  } = useForm<SignupFormInputs>({ mode: 'onChange' });
+    reset,
+  } = useForm<IUpdateProfile>({ mode: 'onChange' });
 
-  const onSubmit: SubmitHandler<SignupFormInputs> = async (data) => {
+  useEffect(() => {
+    if (currentUser) {
+      reset({
+        email: currentUser.email,
+        name: currentUser.name,
+        nic: currentUser.nic,
+        phoneNumber: currentUser.contactNumber,
+        addressLine1: currentUser.addressLine1,
+        addressLine2: currentUser.addressLine2,
+        birthday: new Date(currentUser.birthday!).toISOString(),
+        emailAlertEnabled: currentUser.emailNotificationEnabled,
+        smsAlertEnabled: currentUser.smsNotificationEnabled,
+        paymentId: currentUser.paymentId!,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reset]);
+
+  const onSubmit: SubmitHandler<IUpdateProfile> = async (data) => {
     try {
       let paymentId = '';
 
@@ -40,7 +62,7 @@ const Signup = () => {
         paymentId = paymentMethod?.id || '';
       }
 
-      const payload: SignupFormPayload = {
+      const payload = {
         email: data.email,
         name: data.name,
         nic: data.nic,
@@ -54,14 +76,14 @@ const Signup = () => {
         paymentId,
       };
 
-      const res = await signup(payload);
+      const res = await updateUserProfile(payload);
 
       if (res) {
         toaster.create({
-          description: 'Signed up successfully',
+          description: 'Profile updated successfully!',
           type: 'success',
         });
-        navigate('/login');
+        navigate('/home');
       }
     } catch (error: any) {
       toaster.create({
@@ -70,8 +92,6 @@ const Signup = () => {
       });
     }
   };
-
-  const password = watch('password');
 
   const handleCardElements = async (): Promise<{
     paymentMethod?: PaymentMethod;
@@ -100,15 +120,22 @@ const Signup = () => {
   };
 
   return (
-    <Flex alignItems="center" flexDir="column" w="full" h="full">
+    <Flex
+      flexDir="column"
+      lgDown={{ p: 5 }}
+      lg={{ px: 52, py: 12 }}
+      xl={{ px: 52, py: 12 }}
+    >
       <Text fontSize="lg" md={{ fontSize: '2xl' }} fontWeight="bold">
-        Sign Up
+        Update Profile
       </Text>
       <Box w="full" mt={4} flexGrow={1}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid templateColumns={{ lg: 'repeat(2, 1fr)' }} gap={5}>
             <Field label="Email">
               <Input
+                bg="white"
+                disabled
                 id="email"
                 type="email"
                 placeholder="me@example.com"
@@ -127,6 +154,7 @@ const Signup = () => {
             </Field>
             <Field label="Name">
               <Input
+                bg="white"
                 id="name"
                 placeholder="John Doe"
                 {...register('name', {
@@ -143,6 +171,7 @@ const Signup = () => {
             </Field>
             <Field label="NIC">
               <Input
+                bg="white"
                 id="nic"
                 placeholder="123456789V"
                 {...register('nic', {
@@ -159,6 +188,7 @@ const Signup = () => {
             </Field>
             <Field label="Address Line 1">
               <Input
+                bg="white"
                 id="addressLine1"
                 placeholder="123 Main Street"
                 {...register('addressLine1', {
@@ -171,6 +201,7 @@ const Signup = () => {
             </Field>
             <Field label="Address Line 2">
               <Input
+                bg="white"
                 id="addressLine2"
                 placeholder="Apartment, suite, etc. (optional)"
                 {...register('addressLine2')}
@@ -178,6 +209,7 @@ const Signup = () => {
             </Field>
             <Field label="Mobile">
               <Input
+                bg="white"
                 id="mobile"
                 type="tel"
                 placeholder="0712345678"
@@ -195,6 +227,7 @@ const Signup = () => {
             </Field>
             <Field label="Birthday">
               <Input
+                bg="white"
                 id="birthday"
                 type="date"
                 placeholder="1995/06/15"
@@ -250,23 +283,10 @@ const Signup = () => {
                     message: 'Password must be at least 8 characters long',
                   },
                 })}
+                bg="white"
               />
               <Text fontSize="xs" color="red.600">
                 {errors.password && errors.password.message}
-              </Text>
-            </Field>
-            <Field label="Confirm Password">
-              <PasswordInput
-                id="confirmPassword"
-                placeholder="Re-enter your password"
-                {...register('confirmPassword', {
-                  required: 'Confirm password is required',
-                  validate: (value) =>
-                    value === password || 'Passwords do not match',
-                })}
-              />
-              <Text fontSize="xs" color="red.600">
-                {errors.confirmPassword && errors.confirmPassword.message}
               </Text>
             </Field>
           </Grid>
@@ -307,25 +327,12 @@ const Signup = () => {
             width="full"
             mt={4}
           >
-            Sign Up
+            Update
           </Button>
-          <Flex justify="center" alignItems="center" gap={1} mt={3}>
-            <Text fontSize="sm">Already have an account?</Text>
-            <Text
-              fontSize="sm"
-              color="cyan.600"
-              textDecor="underline"
-              cursor="pointer"
-              fontWeight="bold"
-              onClick={() => navigate('/login')}
-            >
-              Login
-            </Text>
-          </Flex>
         </form>
       </Box>
     </Flex>
   );
 };
 
-export default Signup;
+export default UpdateProfile;

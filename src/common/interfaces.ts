@@ -180,8 +180,8 @@ export interface INotificationData {
   id: number;
   content: string;
   notificationSource: 'ADMIN_NOTIFICATION';
-  isCustomerNotification: boolean;
-  isAgentNotification: boolean;
+  customerNotification: boolean;
+  agentNotification: boolean;
   notificationType: any;
 }
 
@@ -192,17 +192,19 @@ export interface IUpdateAgentPayload {
   name: string;
   contactNumber: string;
   email: string;
+  accessPointName?: string;
   accessPointId: number;
-  status: 'ACTIVE';
+  status: string;
 }
 
-export type ICreateAgentPayload = Omit<IUpdateAgentPayload, 'status' | 'id'>;
+export type ICreateAgentPayload = Omit<IUpdateAgentPayload, 'id'>;
 
 export interface ICreateAgentForm {
   name: string;
   contactNumber: string;
   email: string;
   accessPointId: string[];
+  status: string[];
 }
 
 export interface ILocation {
@@ -226,6 +228,7 @@ export interface VehicleEntryExit {
   distance: number | null;
   entranceName: string | null;
   exitName: string | null;
+  vehicleRegistrationNumber: string | null;
 }
 
 export interface IPaymentConfig {
@@ -241,4 +244,18 @@ export interface BreakDownPayload {
   description: string;
   lat: string;
   lon: string;
+}
+
+export interface IUpdateProfile {
+  email: string;
+  password: string;
+  phoneNumber: string;
+  name: string;
+  nic: string;
+  addressLine1: string;
+  addressLine2: string;
+  birthday: string;
+  smsAlertEnabled: boolean;
+  emailAlertEnabled: boolean;
+  paymentId: string;
 }

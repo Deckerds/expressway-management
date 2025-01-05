@@ -11,7 +11,7 @@ import {
   getMapData,
   getOngoingVehicles,
 } from '../../services/admin';
-import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Tooltip } from 'react-leaflet';
 import { ILocation } from '../../common/interfaces';
 
 const AdminDashboard = () => {
@@ -103,7 +103,7 @@ const AdminDashboard = () => {
           </Box>
           <Box>
             <Text fontSize="sm" fontWeight="bold">
-              Restricted Vehicles
+              Registered Vehicles
             </Text>
             <Flex
               mt={2}
@@ -135,7 +135,16 @@ const AdminDashboard = () => {
             />
             {isSuccess &&
               mapMarkers?.data.map((map: ILocation, index: number) => (
-                <Marker key={index} position={[map.lat, map.lon]}></Marker>
+                <Marker key={index} position={[map.lat, map.lon]}>
+                  <Tooltip
+                    direction="top"
+                    offset={[-15, -15]}
+                    opacity={1}
+                    permanent
+                  >
+                    {map.count.toString()}
+                  </Tooltip>
+                </Marker>
               ))}
           </MapContainer>
         </Box>

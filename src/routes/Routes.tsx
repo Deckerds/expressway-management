@@ -1,37 +1,38 @@
-import { createBrowserRouter } from "react-router-dom";
-import AuthLayout from "../components/AuthLayout";
-import PrivateRoute from "./PrivateRoute";
-import Login from "../pages/Auth/Login";
-import Signup from "../pages/Auth/Signup";
-import CustomerLayout from "../components/CustomerLayout";
-import Home from "../pages/Home/Home";
-import Vehicles from "../pages/Vehicles/Vehicles";
-import VehicleForm from "../pages/Vehicles/VehicleForm";
-import Transactions from "../pages/Transactions/Transactions";
-import Notifications from "../pages/Notifications/Notifications";
-import LiveChat from "../pages/LiveChat/LiveChat";
-import AdminRoute from "./AdminRoute";
-import AdminLayout from "../components/AdminLayout";
-import AdminDashboard from "../pages/Admin/AdminDashboard";
-import ManageCustomers from "../pages/Admin/ManageCustomers";
-import ManageVehicles from "../pages/Admin/ManageVehicles";
-import AccessPoints from "../pages/Admin/AccessPoints";
-import AdminNotifications from "../pages/Admin/AdminNotifications";
-import AgentManagement from "../pages/Admin/AgentManagement";
-import PaymentConfig from "../pages/Admin/PaymentConfig";
-import ReportingModule from "../pages/Admin/ReportingModule";
-import AdminTransactions from "../pages/Admin/AdminTransactions";
-import Journeys from "../pages/MakeTrip/Journeys";
-import Breakdowns from "../pages/Breakdowns/Breakdowns";
-import Landing from "../pages/Landing/Landing";
+import { createBrowserRouter } from 'react-router-dom';
+import AuthLayout from '../components/AuthLayout';
+import PrivateRoute from './PrivateRoute';
+import Login from '../pages/Auth/Login';
+import Signup from '../pages/Auth/Signup';
+import CustomerLayout from '../components/CustomerLayout';
+import Home from '../pages/Home/Home';
+import Vehicles from '../pages/Vehicles/Vehicles';
+import VehicleForm from '../pages/Vehicles/VehicleForm';
+import Transactions from '../pages/Transactions/Transactions';
+import Notifications from '../pages/Notifications/Notifications';
+import LiveChat from '../pages/LiveChat/LiveChat';
+import AdminRoute from './AdminRoute';
+import AdminLayout from '../components/AdminLayout';
+import AdminDashboard from '../pages/Admin/AdminDashboard';
+import ManageCustomers from '../pages/Admin/ManageCustomers';
+import ManageVehicles from '../pages/Admin/ManageVehicles';
+import AccessPoints from '../pages/Admin/AccessPoints';
+import AdminNotifications from '../pages/Admin/AdminNotifications';
+import AgentManagement from '../pages/Admin/AgentManagement';
+import PaymentConfig from '../pages/Admin/PaymentConfig';
+import ReportingModule from '../pages/Admin/ReportingModule';
+import AdminTransactions from '../pages/Admin/AdminTransactions';
+import Journeys from '../pages/MakeTrip/Journeys';
+import Breakdowns from '../pages/Breakdowns/Breakdowns';
+import Landing from '../pages/Landing/Landing';
+import UpdateProfile from '../pages/UpdateProfile/UpdateProfile';
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <Landing />,
   },
   {
-    path: "/login",
+    path: '/login',
     element: (
       <AuthLayout>
         <Login />
@@ -39,7 +40,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/signup",
+    path: '/signup',
     element: (
       <AuthLayout width="44rem">
         <Signup />
@@ -47,7 +48,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/home",
+    path: '/home',
     element: (
       <PrivateRoute
         element={
@@ -59,7 +60,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/vehicles",
+    path: '/vehicles',
     element: (
       <PrivateRoute
         element={
@@ -71,7 +72,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/vehicles/create",
+    path: '/vehicles/create',
     element: (
       <PrivateRoute
         element={
@@ -83,7 +84,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/vehicles/update/:id",
+    path: '/vehicles/update/:id',
     element: (
       <PrivateRoute
         element={
@@ -95,7 +96,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/transactions",
+    path: '/transactions',
     element: (
       <PrivateRoute
         element={
@@ -107,7 +108,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/notifications",
+    path: '/notifications',
     element: (
       <PrivateRoute
         element={
@@ -119,7 +120,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/trips",
+    path: '/trips',
     element: (
       <PrivateRoute
         element={
@@ -131,7 +132,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/report-breakdown",
+    path: '/report-breakdown',
     element: (
       <PrivateRoute
         element={
@@ -143,7 +144,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/chat",
+    path: '/chat',
     element: (
       <PrivateRoute
         element={
@@ -155,7 +156,19 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/admin-dashboard",
+    path: '/update-profile',
+    element: (
+      <PrivateRoute
+        element={
+          <CustomerLayout>
+            <UpdateProfile />
+          </CustomerLayout>
+        }
+      />
+    ),
+  },
+  {
+    path: '/admin-dashboard',
     element: (
       <AdminRoute
         element={
@@ -167,7 +180,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/admin-vehicles",
+    path: '/admin-vehicles',
     element: (
       <AdminRoute
         element={
@@ -179,7 +192,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/admin-customers",
+    path: '/admin-customers',
     element: (
       <AdminRoute
         element={
@@ -191,7 +204,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/admin-access",
+    path: '/admin-access',
     element: (
       <AdminRoute
         element={
@@ -203,7 +216,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/admin-notifications",
+    path: '/admin-notifications',
     element: (
       <AdminRoute
         element={
@@ -215,7 +228,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/admin-agents",
+    path: '/admin-agents',
     element: (
       <AdminRoute
         element={
@@ -227,7 +240,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/admin-payment-config",
+    path: '/admin-payment-config',
     element: (
       <AdminRoute
         element={
@@ -239,7 +252,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/admin-reporting",
+    path: '/admin-reporting',
     element: (
       <AdminRoute
         element={
@@ -251,7 +264,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/admin-transactions",
+    path: '/admin-transactions',
     element: (
       <AdminRoute
         element={

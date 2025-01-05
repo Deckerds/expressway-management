@@ -67,6 +67,13 @@ const AgentForm: FC<IAgentModalForm> = ({
     })),
   });
 
+  const statuses = createListCollection({
+    items: [
+      { label: 'Active', value: 'ACTIVE' },
+      { label: 'Inactive', value: 'INACTIVE' },
+    ],
+  });
+
   const {
     control,
     register,
@@ -82,7 +89,7 @@ const AgentForm: FC<IAgentModalForm> = ({
       if (isUpdate) {
         const payload: IUpdateAgentPayload = {
           id: agent?.id!,
-          status: agent?.status!,
+          status: data?.status[0],
           accessPointId: Number(data.accessPointId[0]),
           contactNumber: data.contactNumber,
           email: data.email,
@@ -99,6 +106,7 @@ const AgentForm: FC<IAgentModalForm> = ({
           contactNumber: data.contactNumber,
           email: data.email,
           name: data.name,
+          status: data.status[0],
         };
         const res = await createAgent(payload);
 
@@ -117,9 +125,9 @@ const AgentForm: FC<IAgentModalForm> = ({
       });
       toggle();
       getData();
-    } catch (error) {
+    } catch (error: any) {
       toaster.create({
-        description: 'Uncaught Error!',
+        description: error?.message || 'Uncaught Error!',
         type: 'error',
       });
     }
@@ -129,6 +137,7 @@ const AgentForm: FC<IAgentModalForm> = ({
     if (isUpdate) {
       reset({
         accessPointId: [agent?.accessPointId.toString()],
+        status: [agent?.status.toString()],
         contactNumber: agent?.contactNumber || '',
         email: agent?.email || '',
         name: agent?.name || '',
@@ -140,6 +149,7 @@ const AgentForm: FC<IAgentModalForm> = ({
         contactNumber: '',
         email: '',
         name: '',
+        status: [''],
       });
     };
   }, [agent, isUpdate, reset]);
@@ -236,6 +246,38 @@ const AgentForm: FC<IAgentModalForm> = ({
                       </SelectTrigger>
                       <SelectContent portalled={false}>
                         {allAccessPoints?.items?.map((item) => (
+                          <SelectItem item={item} key={item.value}>
+                            {item.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </SelectRoot>
+                    <Text fontSize="xs" color="red.600">
+                      {errors.accessPointId && errors.accessPointId.message}
+                    </Text>
+                  </Field>
+                )}
+              />
+              <Controller
+                control={control}
+                name="status"
+                rules={{ required: 'Status required' }}
+                render={({ field }) => (
+                  <Field label="Status">
+                    <SelectRoot
+                      id={field.name}
+                      name={field.name}
+                      collection={statuses}
+                      bg="white"
+                      borderColor="secondary.200"
+                      onValueChange={({ value }) => field.onChange(value)}
+                      value={field.value}
+                    >
+                      <SelectTrigger>
+                        <SelectValueText placeholder="Select Status" />
+                      </SelectTrigger>
+                      <SelectContent portalled={false}>
+                        {statuses?.items?.map((item) => (
                           <SelectItem item={item} key={item.value}>
                             {item.label}
                           </SelectItem>

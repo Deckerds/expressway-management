@@ -58,3 +58,15 @@ export const getLocation = (): Promise<{ lat: string; lon: string }> =>
       reject('Geolocation is not supported by this browser');
     }
   });
+
+export function downloadFile(blobData: Blob, fileName?: string) {
+  const blob = new Blob([blobData], { type: 'application/pdf' });
+
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName || 'report.pdf';
+
+  link.click();
+
+  URL.revokeObjectURL(link.href);
+}

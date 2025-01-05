@@ -1,7 +1,6 @@
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { Box, Flex, HStack, Input, Table, Text } from '@chakra-ui/react';
 import { scrollBarCss } from '../../common/css';
-import ConfirmDialog from '../../components/common/ConfirmDialog';
 import ViewModal from './components/ViewModal';
 import { InputGroup } from '../../components/ui/input-group';
 import { IoSearchOutline } from 'react-icons/io5';
@@ -22,7 +21,6 @@ import { Switch } from '../../components/ui/switch';
 const ManageCustomers = () => {
   const queryClient = useQueryClient();
 
-  const [openToggleConfirm, setOpenToggleConfirm] = useState<boolean>(false);
   const [openViewDialog, setOpenViewModal] = useState<boolean>(false);
   const [selectedCustomer, setSelectedCustomer] = useState<ICustomer | null>(
     null,
@@ -49,17 +47,13 @@ const ManageCustomers = () => {
       });
       queryClient.invalidateQueries({ queryKey: ['adminCustomers'] });
     },
-    onError: () => {
+    onError: (error) => {
       toaster.create({
-        description: 'Uncaught Error!',
+        description: error?.message || 'Uncaught Error!',
         type: 'error',
       });
     },
   });
-
-  const toggleStatusDialog = () => {
-    setOpenToggleConfirm((prev) => !prev);
-  };
 
   const toggleViewDialog = () => {
     setOpenViewModal((prev) => !prev);
@@ -69,7 +63,7 @@ const ManageCustomers = () => {
     if (selectedCustomer) {
       mutation.mutate({
         id: selectedCustomer.id,
-        status: selectedCustomer.status ? false : true,
+        status: selectedCustomer.status === 'ACTIVE' ? false : true,
       });
     }
   };
@@ -201,15 +195,6 @@ const ManageCustomers = () => {
           />
         </Flex>
       )}
-      <ConfirmDialog
-        open={openToggleConfirm}
-        title="Change Status"
-        message="Are you sure you want to change customer status?"
-        cancel={toggleStatusDialog}
-        confirm={() => onToggleStatus()}
-        submitBtn
-        loading={mutation.isPending}
-      />
       <ViewModal
         open={openViewDialog}
         confirm={() => toggleViewDialog()}

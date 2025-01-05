@@ -9,7 +9,6 @@ import {
   MenuItem,
   MenuTrigger,
 } from '../../../components/ui/menu';
-// import ConfirmDialog from '../../../components/common/ConfirmDialog';
 import { useNavigate } from 'react-router-dom';
 import { downloadBase64Image } from '../../../common/functions';
 
@@ -24,16 +23,6 @@ const VehicleCard: FC<IVehicle> = ({
   qrCode,
 }) => {
   const navigate = useNavigate();
-  // const [openRemoveDialog, setOpenRemoveDialog] = useState<boolean>(false);
-
-  // const toggleRemoveDialog = () => {
-  //   setOpenRemoveDialog((prev) => !prev);
-  // };
-
-  // const onDeleteVehicle = (id: number) => {
-  // console.log(id);
-  // do something
-  // };
 
   return (
     <Flex
@@ -116,13 +105,6 @@ const VehicleCard: FC<IVehicle> = ({
       >
         Download QR
       </Button>
-      {/* <ConfirmDialog
-        open={openRemoveDialog}
-        title="Remove Vehicle"
-        message="Are you sure you want to delete this vehicle?"
-        cancel={toggleRemoveDialog}
-        confirm={() => onDeleteVehicle(id)}
-      /> */}
     </Flex>
   );
 };

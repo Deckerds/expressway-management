@@ -54,36 +54,43 @@ const AdminNotifications = () => {
   });
 
   const onSubmit: SubmitHandler<INotification> = async (data) => {
-    if (!data.isAgentNotification && !data.isCustomerNotification) {
-      toaster.create({
-        description: 'At least one end-user required!',
-        type: 'error',
-      });
-    } else if (!data.isSmsNotification && !data.isEmailNotification) {
-      toaster.create({
-        description: 'At least one notification type required!',
-        type: 'error',
-      });
-    } else {
-      const payload: INotificationPayload = {
-        ...data,
-        notificationSource: 'ADMIN_NOTIFICATION',
-      };
-      const res = await sendNotification(payload);
-      if (res.statusCode === 200) {
+    try {
+      if (!data.isAgentNotification && !data.isCustomerNotification) {
         toaster.create({
-          description: 'Notification sent successfully!',
-          type: 'success',
+          description: 'At least one end-user required!',
+          type: 'error',
         });
-        reset({
-          content: '',
-          isAgentNotification: false,
-          isCustomerNotification: false,
-          isEmailNotification: false,
-          isSmsNotification: false,
+      } else if (!data.isSmsNotification && !data.isEmailNotification) {
+        toaster.create({
+          description: 'At least one notification type required!',
+          type: 'error',
         });
-        queryClient.invalidateQueries({ queryKey: ['adminNotifications'] });
+      } else {
+        const payload: INotificationPayload = {
+          ...data,
+          notificationSource: 'ADMIN_NOTIFICATION',
+        };
+        const res = await sendNotification(payload);
+        if (res.statusCode === 200) {
+          toaster.create({
+            description: 'Notification sent successfully!',
+            type: 'success',
+          });
+          reset({
+            content: '',
+            isAgentNotification: false,
+            isCustomerNotification: false,
+            isEmailNotification: false,
+            isSmsNotification: false,
+          });
+          queryClient.invalidateQueries({ queryKey: ['adminNotifications'] });
+        }
       }
+    } catch (error: any) {
+      toaster.create({
+        description: error?.message || 'Uncaught Error!',
+        type: 'error',
+      });
     }
   };
 
@@ -244,10 +251,10 @@ const AdminNotifications = () => {
                     <Table.Cell>{item.notificationType || 'N/A'}</Table.Cell>
                     <Table.Cell>{item.notificationSource}</Table.Cell>
                     <Table.Cell>
-                      {item.isCustomerNotification ? 'Yes' : 'No'}
+                      {item.customerNotification ? 'Yes' : 'No'}
                     </Table.Cell>
                     <Table.Cell>
-                      {item.isAgentNotification ? 'Yes' : 'No'}
+                      {item.agentNotification ? 'Yes' : 'No'}
                     </Table.Cell>
                   </Table.Row>
                 ))}

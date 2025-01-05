@@ -6,9 +6,11 @@ import { MdNavigateNext, MdNavigateBefore } from 'react-icons/md';
 interface IPagination {
   total: number;
   handlePageClick: (selectedItem: { selected: number }) => void;
+  page?: number;
 }
 
-const Pagination: FC<IPagination> = ({ total, handlePageClick }) => {
+const Pagination: FC<IPagination> = ({ total, handlePageClick, page }) => {
+  const remProps = page ? { forcePage: page - 1 } : {};
   return (
     <ReactPaginate
       breakLabel="..."
@@ -24,6 +26,7 @@ const Pagination: FC<IPagination> = ({ total, handlePageClick }) => {
       previousClassName={styles.prev}
       nextClassName={styles.next}
       pageLinkClassName={styles.pageLink}
+      {...remProps}
     />
   );
 };

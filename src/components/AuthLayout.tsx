@@ -1,9 +1,9 @@
-import { FC, ReactNode, useEffect } from "react";
-import { Center, Flex, Spinner } from "@chakra-ui/react";
-import { toaster } from "./ui/toaster";
-import { useNavigate, useLocation } from "react-router-dom";
-import { scrollBarCss } from "../common/css";
-import { useAuth } from "../hooks/useAuth";
+import { FC, ReactNode, useEffect } from 'react';
+import { Center, Flex, Spinner } from '@chakra-ui/react';
+import { toaster } from './ui/toaster';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { scrollBarCss } from '../common/css';
+import { useAuth } from '../hooks/useAuth';
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -16,12 +16,12 @@ const AuthLayout: FC<AuthLayoutProps> = ({ width, children }) => {
   const location = useLocation();
 
   useEffect(() => {
-    if (isAuthenticated && location.pathname !== "/home") {
+    if (isAuthenticated && location.pathname !== '/home') {
       toaster.create({
-        description: "Already logged in",
-        type: "info",
+        description: 'Already logged in',
+        type: 'info',
       });
-      navigate("/home");
+      navigate('/home');
     }
   }, [isAuthenticated, navigate, location.pathname]);
 
@@ -52,8 +52,8 @@ const AuthLayout: FC<AuthLayoutProps> = ({ width, children }) => {
       <Flex
         justify="center"
         background="white"
-        w={width ? width : "30rem"}
-        md={{ minW: "30rem" }}
+        w={width ? width : '30rem'}
+        md={{ minW: '30rem' }}
         minH="30rem"
         borderRadius="2xl"
         shadow="md"

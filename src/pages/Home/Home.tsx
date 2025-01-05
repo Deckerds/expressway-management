@@ -52,7 +52,11 @@ const Home = () => {
             />
           )}
           {role === 'CUSTOMER' && (
-            <DashboardButton name="Update Profile" Icon={<FaUser />} />
+            <DashboardButton
+              name="Update Profile"
+              onClick={() => navigate('/update-profile')}
+              Icon={<FaUser />}
+            />
           )}
           {role === 'CUSTOMER' && (
             <DashboardButton
